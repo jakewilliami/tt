@@ -1,4 +1,4 @@
-<h1 align="center">Tea Timer (`tt`)</h1>
+<h1 align="center">Tea Timer</h1>
 
 ## Description
 
