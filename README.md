@@ -7,7 +7,7 @@ A simple tea timer CLI written in Rust.  Will count up in seconds.
 ## Quick Start
 
 ```commandline
-$ ./build.sh
+$ just
 $ ./tt -h
 ```
 
