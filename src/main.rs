@@ -1,8 +1,11 @@
-use std::io::{Write, stdout};
-use std::{thread, time};
-use std::sync::{Arc, Mutex, atomic::{AtomicBool, Ordering}};
 use clap::{crate_authors, crate_version, Parser};
-use crossterm::{QueueableCommand, cursor, terminal, ExecutableCommand};
+use crossterm::{cursor, terminal, ExecutableCommand, QueueableCommand};
+use std::io::{stdout, Write};
+use std::sync::{
+    atomic::{AtomicBool, Ordering},
+    Arc, Mutex,
+};
+use std::{thread, time};
 
 #[derive(Parser)]
 #[command(name = "tt", author = crate_authors!("\n"), version = crate_version!())]
@@ -35,7 +38,8 @@ fn main() {
         // Show cursor before exitting
         let mut stdout = s.lock().unwrap();
         stdout.execute(cursor::Show).unwrap();
-    }).expect("Error setting Ctrl-C handler");
+    })
+    .expect("Error setting Ctrl-C handler");
 
     // Hide cursor at start of programme
     let mut stdout = stdout.lock().unwrap();
@@ -56,11 +60,15 @@ fn main() {
             // Write to time stdout:
             // https://stackoverflow.com/a/59890400/12069968
             stdout.queue(cursor::SavePosition).unwrap();
-            stdout.write_all(format_seconds(seconds).as_bytes()).unwrap();
+            stdout
+                .write_all(format_seconds(seconds).as_bytes())
+                .unwrap();
             stdout.queue(cursor::RestorePosition).unwrap();
             stdout.flush().unwrap();
             stdout.queue(cursor::RestorePosition).unwrap();
-            stdout.queue(terminal::Clear(terminal::ClearType::FromCursorDown)).unwrap();
+            stdout
+                .queue(terminal::Clear(terminal::ClearType::FromCursorDown))
+                .unwrap();
         }
 
         // Sleep for one-tenth of a seecond
@@ -77,10 +85,5 @@ fn format_seconds(seconds: usize) -> String {
     let minutes_rem = (seconds / 60) % 60;
     let hours_rem = (seconds / 60) / 60;
 
-    format!(
-        "{:0>2}:{:0>2}:{:0>2}",
-        hours_rem,
-        minutes_rem,
-        seconds_rem
-    )
+    format!("{:0>2}:{:0>2}:{:0>2}", hours_rem, minutes_rem, seconds_rem)
 }
