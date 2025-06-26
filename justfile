@@ -4,39 +4,9 @@
 target := env_var_or_default("TARGET", "release")
 build_option := if target != "debug" { "--" + target } else { "--" }
 
-#  Define binary/target
+#  Define binary/target [1]
 #
-# NOTE: There are a few different ways to approach this [1].
-#
-# If we were in `build.rs` we could use the environment variable [2]:
-#
-#     env_var("CARGO_PKG_NAME")
-#
-# If the project directory is also the name of the project, and the justfile is
-# in the root of the project (both quite reasonable assumptions, but not always
-# the case), then we can use that directory name [3, 4]:
-#
-#     file_stem(justfile_dir())
-#
-# Otherwise, you could use `cargo metadata` [5]:
-#
-#     if command -v jq 2>&1 >/dev/null:
-#         cargo metadata --format-version=1 --color=never --no-deps |
-#            jq --raw-output '.packages[0].name'
-#
-# Alternatively, we can parse the package ID [6].  This is what I ended up doing,
-# because I figured that `jq` is less common to have than `awk` and `cut`, and
-# `cargo pkgid` probably has smaller overhead.
-#
-# Note that this would not necessarily be appropriate if the Rust package was a
-# library rather than a binary.
-#
-# [1]: https://stackoverflow.com/q/75023094
-# [2]: https://doc.rust-lang.org/cargo/reference/environment-variables.html
-# [3]: https://just.systems/man/en/functions.html#justfile-and-justfile-directory
-# [4]: https://just.systems/man/en/functions.html#path-manipulation
-# [5]: https://doc.rust-lang.org/cargo/commands/cargo-metadata.html
-# [6]: https://doc.rust-lang.org/cargo/reference/pkgid-spec.html
+# [1] github.com/jakewilliami/configs/blob/ec00da3f/src/build/justfile-rs#L9-L41
 project_dir := justfile_dir() + "/"
 bin_name := `cargo pkgid | awk -F'/' '{print $NF}' | cut -d'#' -f1`
 target_bin := "target" / target / bin_name
