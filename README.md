@@ -6,14 +6,14 @@ A simple tea timer CLI written in Rust.  Will count up in seconds.
 
 ## Quick Start
 
-```commandline
+```shell
 $ just
 $ ./tt -h
 ```
 
 ## Usage
 
-```commandline
+```shell
 $ tt -h
 Tea timer!  Count up in seconds
 
